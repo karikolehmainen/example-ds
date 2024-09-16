@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: daps-ui
+  name: daps-ui
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: daps-ui
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: daps-ui
+  name: daps-ui
+  namespace: example-ds
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: daps-ui
+  template:
+    metadata:
+      labels:
+        app: daps-ui
+    spec:
+      containers:
+        - image: "karikolehmainen/dsil-daps-ui:0.1"
+          imagePullPolicy: Always
+          name: daps-ui
+          ports:
+          - containerPort: 80
+            name: http
